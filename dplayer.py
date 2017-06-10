@@ -73,7 +73,9 @@ class PokerPlayerAPI(Resource):
         print("THE BOARD", data['board'])
         # rand = random.randrange(0,4)
         max_bid = data['max_bid']
-        bid = max_bid - 25
+        min_bid = data['min_bid']
+        big_blind = data['big_blind']
+        bid = min_bid + big_blind + 20
         hand = data['hand']
         board = data['board']
 
@@ -91,14 +93,13 @@ class PokerPlayerAPI(Resource):
                 or ((hand[0][0] == 'A') or (hand[1][0] == 'A'))
                 or ((hand[0][0] == 'T') or (hand[1][0] == 'T'))):
                 print("GOING ALL IN FOR GOOD CARDS")
-                return max_bid
+                return bid
             else:
-                return data['min_bid']
+                return 0
         elif len(board) == 3:
             firstBoardCard = board[0][0]
             secondBoardCard = board[1][0]
             thirdBoardCard = board[2][0]
-
             if ((firstHandCard == secondHandCard == firstBoardCard)
                 or (firstHandCard == secondHandCard == secondBoardCard)
                 or (firstHandCard == secondHandCard == thirdBoardCard)
@@ -119,7 +120,7 @@ class PokerPlayerAPI(Resource):
                 print("GOING ALL IN FOR GOOD CARDS")
                 return max_bid
             else:
-                return data['min_bid']
+                return 0
 
     # dispatch incoming get commands
     def get(self, command_id):
