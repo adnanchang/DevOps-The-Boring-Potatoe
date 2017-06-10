@@ -68,39 +68,23 @@ class PokerPlayerAPI(Resource):
     # @return a dictionary containing the following values
     #         bid  : a number between 0 and max_bid
     def __get_bid(self, data):
-        #Initializing the Variables
-        min_bid = data['min_bid']
-        max_bid = data['max_bid']
-        big_blind = data['big_blind']
-        pot = data['pot']
-        board = data['board']
-        hand = data['hand']
-        rank = data['rank']
-        suit = data['suit']
-
-        #Initializing Bid
-        bid = {'bid' : random.randrange(0,max_bid)}
-
-        #Conditions for FOLD
-        if bid < min_bid:
+        rand = random.randrange(0,4)
+        print ("RAND IS", rand)
+        if (rand == 0):
+            return data['max_bid']
+        elif rand == 1:
+            return data['min_bid']
+        elif rand == 2:
+            return data['max-bid'] - 20
+        elif rand == 3:
             return 0
-        elif bid > max_bid:
-            return -1 #Returning Error
-        elif ((bid > min_bid) and (bid < (min_bid + big_blind))):
-            return -1 #Returning Error
-        #Conditions for CHECK
-        elif ((bid == 0) and (min_bid == 0)):
-            return bid
-        #Conditions for CALL
-        elif ((bid == min_bid) and (min_bid > 0)):
-            return bid
 
     # dispatch incoming get commands
     def get(self, command_id):
 
         data = request.form['data']
         data = json.loads(data)
-
+        print ("Server pinged")
         if command_id == 'get_bid':
             return {'bid': self.__get_bid(data)}
         else:
@@ -143,7 +127,7 @@ example:
         print('registration successful')
 
     try:
-        app.run(host='0.0.0.0', port=api_port, debug=False)
+        app.run(host='192.168.0.16', port=api_port, debug=True)
     finally:
         put("%s/dpoker/v1/leave_game" % gregister_url, data={'team': team_name, \
                                                              'url': api_url, \
