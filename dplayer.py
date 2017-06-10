@@ -11,7 +11,7 @@
 import random
 
 gregister_url = 'http://192.168.0.5:5001'
-glocalip_adr = '192.168.0.5'
+glocalip_adr = '192.168.0.16'
 
 # -----------------------------------------------------------
 
@@ -67,15 +67,19 @@ class PokerPlayerAPI(Resource):
     #
     # @return a dictionary containing the following values
     #         bid  : a number between 0 and max_bid
+
     def __get_bid(self, data):
+        print(data)
         rand = random.randrange(0,4)
+        max_bid = data['max_bid']
+        bid = max_bid-10
         print ("RAND IS", rand)
         if (rand == 0):
             return data['max_bid']
         elif rand == 1:
             return data['min_bid']
         elif rand == 2:
-            return data['max-bid'] - 20
+            return bid
         elif rand == 3:
             return 0
 
