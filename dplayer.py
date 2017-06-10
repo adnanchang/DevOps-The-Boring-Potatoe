@@ -73,19 +73,53 @@ class PokerPlayerAPI(Resource):
         print("THE BOARD", data['board'])
         # rand = random.randrange(0,4)
         max_bid = data['max_bid']
-        bid = max_bid-25
+        bid = max_bid - 25
         hand = data['hand']
-        if((hand[0][0] == hand[1][0])):
-            print("GOING ALL IN FOR ONE PAIR")
-            return max_bid
-        if(((hand[0][0] == 'J') or (hand[1][0] == 'J'))
-            or ((hand[0][0] == 'Q') or (hand[1][0] == 'Q'))
-            or ((hand[0][0] == 'K') or (hand[1][0] == 'K'))
-            or ((hand[0][0] == 'A') or (hand[1][0] == 'A'))):
-            print("GOING ALL IN FOR GOOD CARDS")
-            return max_bid
-        else:
-            return data['min_bid']
+        board = data['board']
+
+        firstHandCard = hand[0][0]
+        secondHandCard = hand[1][0]
+
+        # If the board is empty
+        if len(board) == 0:
+            if ((hand[0][0] == hand[1][0])):
+                print("GOING ALL IN FOR ONE PAIR")
+                return max_bid
+            if (((hand[0][0] == 'J') or (hand[1][0] == 'J'))
+                or ((hand[0][0] == 'Q') or (hand[1][0] == 'Q'))
+                or ((hand[0][0] == 'K') or (hand[1][0] == 'K'))
+                or ((hand[0][0] == 'A') or (hand[1][0] == 'A'))
+                or ((hand[0][0] == 'T') or (hand[1][0] == 'T'))):
+                print("GOING ALL IN FOR GOOD CARDS")
+                return max_bid
+            else:
+                return data['min_bid']
+        elif len(board) == 3:
+            firstBoardCard = board[0][0]
+            secondBoardCard = board[1][0]
+            thirdBoardCard = board[2][0]
+
+            if ((firstHandCard == secondHandCard == firstBoardCard)
+                or (firstHandCard == secondHandCard == secondBoardCard)
+                or (firstHandCard == secondHandCard == thirdBoardCard)
+                or (secondHandCard == firstBoardCard == secondBoardCard)
+                or (secondHandCard == firstBoardCard == thirdBoardCard)
+                or (secondHandCard == secondBoardCard == thirdBoardCard)
+                or (firstBoardCard == secondBoardCard == thirdBoardCard)):
+                print("GOT A THREE PAIR")
+                return max_bid
+            elif ((hand[0][0] == hand[1][0])):
+                print("GOING ALL IN FOR ONE PAIR")
+                return max_bid
+            elif (((hand[0][0] == 'J') or (hand[1][0] == 'J'))
+                or ((hand[0][0] == 'Q') or (hand[1][0] == 'Q'))
+                or ((hand[0][0] == 'K') or (hand[1][0] == 'K'))
+                or ((hand[0][0] == 'A') or (hand[1][0] == 'A'))
+                or ((hand[0][0] == 'T') or (hand[1][0] == 'T'))):
+                print("GOING ALL IN FOR GOOD CARDS")
+                return max_bid
+            else:
+                return data['min_bid']
 
     # dispatch incoming get commands
     def get(self, command_id):
