@@ -70,18 +70,22 @@ class PokerPlayerAPI(Resource):
 
     def __get_bid(self, data):
         print(data)
-        rand = random.randrange(0,4)
+        print("THE BOARD", data['board'])
+        # rand = random.randrange(0,4)
         max_bid = data['max_bid']
-        bid = max_bid-10
-        print ("RAND IS", rand)
-        if (rand == 0):
-            return data['max_bid']
-        elif rand == 1:
+        bid = max_bid-25
+        hand = data['hand']
+        if((hand[0][0] == hand[1][0])):
+            print("GOING ALL IN FOR ONE PAIR")
+            return max_bid
+        if(((hand[0][0] == 'J') or (hand[1][0] == 'J'))
+            or ((hand[0][0] == 'Q') or (hand[1][0] == 'Q'))
+            or ((hand[0][0] == 'K') or (hand[1][0] == 'K'))
+            or ((hand[0][0] == 'A') or (hand[1][0] == 'A'))):
+            print("GOING ALL IN FOR GOOD CARDS")
+            return max_bid
+        else:
             return data['min_bid']
-        elif rand == 2:
-            return bid
-        elif rand == 3:
-            return 0
 
     # dispatch incoming get commands
     def get(self, command_id):
